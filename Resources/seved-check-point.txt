@@ -1,0 +1,1206 @@
+
+import numpy as np
+
+
+def push(stack , item):
+    stack.append(item)
+    return stack
+
+def pop(stack):
+    new_stack = stack[1:]
+    return new_stack, stack[0]
+def empty(stack):
+    #print('\nlen',len(stack))
+    if (len(stack) == 0):
+        return True
+    return False
+
+def Boundaries(x, y, dimension):
+    if (y < dimension[0] and -1 < y and x < dimension[1] and -1 < x):
+        return True
+    else: return False
+
+def Float(i, j, Matrix, Visited, dimension, BW):
+
+    Area = []
+    Stack = [[j,i]]
+    Visited[i,j] = 1
+    x = 0
+    y = 0
+    #print('\nstart ..')
+    while(not empty(Stack)):
+
+        Stack,Cell = pop(Stack)
+
+        x = Cell[0] + 1
+        y = Cell[1]
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-1 ..')
+            Area.append([x,y])
+            push(Stack, [x,y])
+            Visited[y, x] = 1
+        x = Cell[0]
+        y = Cell[1] + 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-2 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] + 1
+        y = Cell[1] + 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-3 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] - 1
+        y = Cell[1]
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-4 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0]
+        y = Cell[1] - 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-5 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] - 1
+        y = Cell[1] - 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-6 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] - 1
+        y = Cell[1] + 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-7 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] + 1
+        y = Cell[1] - 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-8 ..')
+            Area.append([x, y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+
+
+    return Area
+
+
+img = np.array([[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+                [0,0,0,0,0,1,1,1,1,0,0,0,0,0],
+                [0,0,0,0,0,1,1,0,0,0,0,0,0,0],
+                [1,0,0,0,0,0,1,0,0,0,0,1,0,1],
+                [1,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,0,0,0,0,0,1,0,0],
+                [1,0,0,0,0,0,0,0,0,0,0,1,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+                [0,0,0,0,0,1,1,1,1,0,0,0,0,0],
+                [0,0,0,0,0,1,1,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+dimension = img.shape
+#print(img)
+#Visited = np.zeros((dimension[0],dimension[1]))
+#res = Float(10, 7, img, Visited, dimension)
+#print(res)
+#print(len(res))
+
+def Floating_Point_Algorithm(Matrix, dimension, BW) :
+
+    Visited = np.zeros((dimension[0],dimension[1]))
+    Areas = []
+    for i in range(15, 35):
+        for j in range(12, 38):
+            if(Visited[i][j] == 0 and Matrix[i][j] == BW):
+                Area = Float(i, j, Matrix, Visited, dimension, BW)
+                if (len(Area) != 0):
+                   Areas.append(Area)
+    return Areas
+
+
+
+
+
+
+
+#areas = Floating_Point_Algorithm(img, dimension, 0)
+#for area in areas:
+#    print(area)
+#    print('\n___________________\n')
+
+#newImg = np.zeros((dimension[0],dimension[1]))
+#Areas = []
+#for area in areas:
+#    for cell in area:
+#        newImg[cell[1],cell[0]] = 127
+#print(newImg)
+'''
+import cv2
+import numpy as np
+im2 = cv2.imread('Resources/s5.jpg')
+bigger = cv2.resize(im2, (300, 300))
+cv2.imshow('exp',bigger)
+cv2.waitKey(0)
+'''
+
+'''
+import cv2
+import numpy as np
+
+im = cv2.imread('Resources/s3.jpg',0)
+im = cv2.resize(im, (300, 300))
+im2 = cv2.imread('Resources/s3.jpg')
+im2 = cv2.resize(im2, (300, 300))
+imgt = cv2.adaptiveThreshold(im, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 12)
+
+areas = Floating_Point_Algorithm(imgt, imgt.shape, 0)
+#print(imgt[:10,:10])
+newImg = np.zeros(imgt.shape)
+#print(imgt)
+#print(len(areas))
+#for area in areas:
+#    print(area)
+#    print('\n___________________\n')
+areas.sort(key=len)
+for area in areas[-1:]:
+    for cell in area:
+        newImg[cell[1],cell[0]] = 255
+areas = Floating_Point_Algorithm(newImg, imgt.shape, 0)
+areas.sort(key=len)
+for area in areas[:-1]:
+    for cell in area:
+        newImg[cell[1],cell[0]] = 255
+
+newIm = cv2.morphologyEx(newImg,cv2.MORPH_CLOSE,(5,5))
+gray = np.float32(newIm)
+dst = cv2.cornerHarris(gray,3,5,0.1)
+im2[dst > 0.01*dst.max()] = [0,0,255]
+
+
+cv2.imshow('1',imgt)
+cv2.imshow('2',newImg)
+cv2.imshow('3',newIm)
+cv2.imshow('4',im2)
+
+cv2.waitKey(0)
+'''
+
+'''
+import numpy as np
+import cv2 as cv
+import math
+from matplotlib import pyplot as plt
+#Contours
+im = cv.imread("Resources/Sodo.jpg",0)
+img = cv.GaussianBlur(im,(11,11), 100)
+
+dst2 = cv.Canny(img,100, 200)
+dst3 = cv.equalizeHist(img)
+ret , dst4 = cv.threshold(img, 100, 255 , cv.THRESH_BINARY)
+
+dst5 = cv.adaptiveThreshold(im, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 12)
+
+
+cv.imshow('Contor',dst5)
+cv.waitKey(0)
+'''
+
+
+'''
+import cv2
+import numpy as np
+
+img = cv2.imread('Resources/gr.jpg')
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+gray = np.float32(gray)
+dst = cv2.cornerHarris(gray,5,7,0.1)
+
+dst = cv2.dilate(dst,None)
+cv2.imshow('dst',dst)
+cv2.waitKey(0)
+
+img[dst > 0.01*dst.max()] = [0,0,255]
+cv2.imshow('dst',img)
+cv2.waitKey(0)
+'''
+
+
+
+
+'''
+img = cv2.bitwise_not(imgt)
+size = np.size(img)
+skel = np.zeros(img.shape, np.uint8)
+
+#cv2.imshow('skel',skel)
+#cv2.waitKey(0)
+
+ret, img = cv2.threshold(img, 127, 255, 0)
+#cv2.imshow('img',img)
+#cv2.waitKey(0)
+element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+done = False
+
+while (not done):
+     eroded = cv2.erode(img, element)
+     temp = cv2.dilate(eroded, element)
+     temp = cv2.subtract(img, temp)
+     skel = cv2.bitwise_or(skel ,temp)
+     img = eroded.copy()
+     zeros = size - cv2.countNonZero(img)
+     if zeros == size:
+         done = True
+
+cv2.imshow('skel',skel)
+cv2.waitKey(0)
+'''
+
+
+
+'''
+import numpy as np
+import cv2 as cv
+import math
+from matplotlib import pyplot as plt
+
+
+img = cv.imread("Resources/Sodo.jpg",0)
+
+CANNY = cv.Canny(img, 100, 200, None, 3)
+
+
+LT = cv.cvtColor(CANNY, cv.COLOR_GRAY2BGR)
+PLT = np.copy(LT)
+
+linesP = cv.HoughLinesP(CANNY, 1, np.pi / 180, 50, None, 100, 4)
+
+if linesP is not None:
+    for i in range(0, len(linesP)):
+        l = linesP[i][0]
+        cv.line(PLT, (l[0], l[1]), (l[2], l[3]), (0, 0, 255), 1, cv.LINE_AA)
+
+plt.subplot(1,2, 1)
+plt.imshow(img,'gray')
+plt.title('Original')
+
+plt.subplot(1,2, 2)
+plt.imshow(PLT,'gray')
+plt.title('P L T')
+
+plt.show()
+'''
+
+
+'''
+import numpy as np
+import cv2 as cv
+import math
+from matplotlib import pyplot as plt
+
+
+img = cv.imread("Resources/Sodo.jpg",0)
+f = np.fft.fft2(img)
+fshift = np.fft.fftshift(f)
+magnitude_spectrum = 20*np.log(np.abs(fshift))
+plt.subplot(1,2,1),plt.imshow(img, cmap = 'gray')
+plt.title('Original'), plt.xticks([]), plt.yticks([])
+plt.subplot(1,2,2),plt.imshow(magnitude_spectrum, cmap = 'gray')
+plt.title('MS'), plt.xticks([]), plt.yticks([])
+plt.show()
+'''
+'''
+img = cv.imread("Resources/Sodo.jpg",0)
+rows, cols = img.shape
+crow,ccol = rows//2 , cols//2
+f = np.fft.fft2(img)
+fshift = np.fft.fftshift(f)
+fshift[crow-30:crow+31, ccol-30:ccol+31] = 0
+f_ishift = np.fft.ifftshift(fshift)
+img_back = np.fft.ifft2(f_ishift)
+img_back = np.real(img_back)
+plt.subplot(121),plt.imshow(img, cmap = 'gray')
+plt.title('Original'), plt.xticks([]), plt.yticks([])
+plt.subplot(122),plt.imshow(img_back, cmap = 'gray')
+plt.title('HPF'), plt.xticks([]), plt.yticks([])
+plt.show()
+'''
+'''
+import numpy as np
+import cv2 as cv
+import math
+from matplotlib import pyplot as plt
+#Contours
+img = cv.imread("Resources/s6.jpg")
+dst = cv.Canny(img,50, 200)
+contor, hierarchy = cv.findContours(dst,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_NONE)
+cv.drawContours(img,contor,-1,(0,0,255),3)
+cv.imshow('Contor',img)
+cv.waitKey(0)
+'''
+
+
+
+
+'''
+import cv2
+import numpy as np
+
+img = cv2.imread('Resources/1606037909232.jpg')
+img = cv2.medianBlur(img,5)
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 20, param1 = 100, param2 = 25, minRadius= 0, maxRadius= 0)
+
+circles = np.uint16(np.around(circles))
+for i in circles[0,:]:
+ cv2.circle(img,(i[0],i[1]),i[2],(0,255,0),2)
+ cv2.circle(img,(i[0],i[1]),2,(0,0,255),3)
+cv2.imshow('',img)
+cv2.waitKey(0)
+'''
+
+
+
+
+# home work : contour application
+
+
+
+
+'''
+import cv2
+import numpy as np
+
+img = cv2.imread('Resources/1606037909253.jpg')
+cv2.imshow('img',img)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+edges = cv2.Canny(gray, 50, 150)
+lines = cv2.HoughLines(edges, 1, np.pi/180, 200)
+
+for line in lines :
+ rho , theta = line[0]
+ a = np.cos(theta)
+ b = np.sin(theta)
+ x0 = a*rho
+ y0 = b*rho
+ x1 = int(x0 + 1000*(-b))
+ y1 = int(y0 + 1000*(a))
+ x2 = int(x0 - 1000*(-b))
+ y2 = int(y0 - 1000*(a))
+ cv2.line(img, (x1,y1),(x2,y2),(0,0,255),3)
+cv2.imshow('',img)
+cv2.waitKey(0)
+'''
+
+'''
+import cv2
+img = cv2.imread('Resources/1606037909247.jpg')
+
+mask = cv2.imread('Resources/1606037909241.jpg',0)
+dst = cv2.inpaint(img,mask, 3, cv2.INPAINT_TELEA)
+cv2.imshow('',img)
+cv2.imshow('', mask)
+cv2.imshow('',dst)
+cv2.waitKey(0)
+'''
+
+
+'''
+import cv2
+img = cv2.imread('')
+lower_reso = cv2.pyrDown(img)
+upper_reso = cv2.pyrUp()
+'''
+
+
+'''
+import numpy as np
+import cv2
+from matplotlib import pyplot as plt
+
+img = cv2.imread('',0)
+
+dft = cv2.dft(np.float32(img),flags = cv2.DFT_COMPLEX_OUTPUT)
+dft_shift = np.fft.fftshift(dft)
+
+magnitude_spectrum = 20 * np.log(cv2.magnitude(dft_shift[:,:,1]))
+
+plt.subplot(121),plt.imshow(img, cnap = )
+'''
+
+'''
+import cv2
+import numpy as np
+img = cv2.imread("Resources/skelHourse.jpg", 0)
+size = np.size(img)
+skel = np.zeros(img.shape, np.unit8)
+
+cv2.imshow("skel", skel)
+cv2.waitKey(0)
+
+ret, img = cv2.threshold(img, 127, 255,0)
+cv2.imshow('img', img)
+cv2.waitKey(0)
+
+element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
+done = False
+while (not done):
+ eroded = cv2.erode(img, element)
+ temp = cv2.dilate(eroded, element)
+ temp = cv2.subtract(img, temp)
+ skel = cv2.bitwise_or(skel, temp)
+ img = eroded.copy()
+ zeros = size - cv2.countNonZero(img)
+ if zeros == size:
+  done = True
+cv2.imshow("skel", skel)
+cv2.waitKey(0)
+'''
+
+'''
+import cv2
+from matplotlib import pyplot as plt
+
+Orginal_Image = cv2.imread('Resources/coins.jpg',0)
+Noisy_Image = cv2.medianBlur(Orginal_Image,5)
+Gaussian_Filtered_Image = cv2.GaussianBlur(Orginal_Image, (21,21), 20)
+
+ret, Noisy_Image_Thresholeded1 = cv2.threshold(Noisy_Image,127,255,cv2.THRESH_BINARY)
+ret, Noisy_Image_Thresholeded2 = cv2.threshold(Noisy_Image,0,255,cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+ret, Gaussian_Filtered_Image_Thresholeded = cv2.threshold(Noisy_Image,0,255,cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+
+plt.subplot(3,3, 1)
+plt.imshow(Noisy_Image,'gray')
+plt.title('Noisy image')
+
+plt.subplot(3, 3, 2)
+plt.hist(Noisy_Image.ravel(), 256, [0,256])
+plt.title('Noisy image histogram')
+
+plt.subplot(3,3, 3)
+plt.imshow(Noisy_Image_Thresholeded1,'gray')
+plt.title('Noisy_Image_Thresholeded (127)')
+
+
+plt.subplot(3,3, 4)
+plt.imshow(Noisy_Image,'gray')
+plt.title('Noisy_Image')
+
+plt.subplot(3, 3, 5)
+plt.hist(Noisy_Image.ravel(), 256, [0,256])
+plt.title('Noisy image histogram')
+
+plt.subplot(3,3, 6)
+plt.imshow(Noisy_Image_Thresholeded2,'gray')
+plt.title('Noisy_Image_Thresholeded OTSU')
+
+plt.subplot(3,3, 7)
+plt.imshow(Gaussian_Filtered_Image,'gray')
+plt.title('Gaussian filtered image')
+
+plt.subplot(3, 3, 8)
+plt.hist(Gaussian_Filtered_Image.ravel(), 256, [0,256])
+plt.title('Gaussian filtered image histogram')
+
+plt.subplot(3,3, 9)
+plt.imshow(Gaussian_Filtered_Image_Thresholeded,'gray')
+plt.title('Gaussian filtered image then OTSU')
+
+
+plt.show()
+'''
+
+
+
+
+
+'''
+import cv2
+from matplotlib import pyplot as plt
+
+img = cv2.imread('Resources/numbers.jpg',0)
+ret , thresh1 = cv2.threshold(img, 127, 255 , cv2.THRESH_BINARY)
+ret , thresh2 = cv2.threshold(img, 127, 255 , cv2.THRESH_BINARY)
+ret , thresh3 = cv2.threshold(img, 127, 255 , cv2.THRESH_BINARY)
+ret , thresh4 = cv2.threshold(img, 127, 255 , cv2.THRESH_BINARY)
+ret , thresh5 = cv2.threshold(img, 127, 255 , cv2.THRESH_BINARY)
+
+titles = ['Org img','Bin', 'Bin Inv', 'Trunc', 'Tozero', 'Tozero Inv']
+images = [img, thresh1,thresh2,thresh3,thresh4,thresh5]
+
+for i in range(6):
+    plt.subplot(2,3,i+1)
+    plt.imshow(images[i],'gray')
+    plt.title(titles[i])
+plt.show()
+'''
+
+
+'''
+import cv2
+from matplotlib import pyplot as plt
+
+img = cv2.imread('Resources/net.jpg',0)
+
+laplacian = cv2.Laplacian(img,cv2.CV_64F)
+
+plt.subplot(1,2,1),plt.imshow(img,cmap = 'gray')
+plt.title('Original'), plt.xticks([]), plt.yticks([])
+plt.subplot(1,2,2),plt.imshow(laplacian,cmap = 'gray')
+plt.title('Laplacian'), plt.xticks([]), plt.yticks([])
+
+
+plt.show()
+'''
+
+'''
+import numpy as np
+import cv2
+from matplotlib import pyplot as plt
+
+image = cv2.imread("Resources/image.png", 0)
+cv2.imshow("image", image)
+plt.hist(image.ravel(), 256, [0,256])
+plt.show()
+cv2.waitKey(0)
+'''
+
+'''
+import numpy as np
+import cv2
+from matplotlib import pyplot as plt
+
+image = cv2.imread("Resources/image.png")
+color = ('r','g','b')
+for i,col in enumerate(color):
+    histr = cv2.calcHist([image],[i],None,[256],[0,256])
+    plt.plot(histr,color = col)
+    plt.xlim([0,256])
+plt.show()
+'''
+
+'''
+import cv2
+image = cv2.imread("Resources/image.png", 0)
+cv2.imshow("image", image)
+image_equ = cv2.equalizeHist(image)
+cv2.imshow("Image Equalization", image_equ)
+cv2.waitKey(0)
+'''
+
+#search : image equalization for three channel images format .
+
+'''
+import cv2
+image = cv2.imread("Resources/image.png")
+blur = cv2.blur(image, (15,15))
+cv2.imshow("image", blur)
+cv2.waitKey(0)
+'''
+
+'''
+import cv2
+image = cv2.imread("Resources/image.png")
+gb = cv2.GaussianBlur(image, (21,21), 20)
+cv2.imshow(" gaus blur ",gb)
+cv2.waitKey(0)
+'''
+
+
+#median blur
+#Sobel / canny / laplasian filters
+'''
+import cv2
+imOrg = cv2.imread("Resources/image.png")
+imGra = cv2.cvtColor(imOrg, cv2.COLOR_BGR2GRAY)
+filter_Image = cv2.Canny(imGra, threshold1= 100, threshold2= 252)
+cv2.imshow(" orginal image", imOrg)
+cv2.imshow(" filter image ",filter_Image)
+cv2.waitKey(0)
+'''
+
+'''
+import cv2
+import numpy as np
+
+
+im = cv2.imread('Resources/s6.jpg',0)
+cv2.imshow('ttd', im)
+im = cv2.resize(im, (1000, 1000))
+
+imgt = cv2.adaptiveThreshold(im, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 12)
+cv2.imshow('tt', imgt)
+cv2.waitKey(0)
+'''
+'''
+import cv2
+import numpy as np
+
+
+def Generate_Solution_Image(matrix):
+    frame = cv2.imread('Resources/digits/empty.jpg',0)
+    for i in range(0,9):
+        for j in range(0,9):
+            frame[i*50:(i+1)*50,j*50:(j+1)*50] = cv2.imread('Resources/digits/d' + str(matrix[i,j]) +'.jpg',0)
+    ret, frame = cv2.threshold(frame, 127, 255, cv2.THRESH_BINARY)
+    return frame
+
+def Merge_Two_Images(solution_image, video_frame):
+
+    for i in range(0,500):
+        for j in range(0, 500):
+            if(solution_image[i,j] != 0):
+                video_frame[i,j] = [solution_image[i,j], 0, 0]
+    return video_frame
+
+mat = np.array([[1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, -1, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9]])
+
+
+
+
+#Homework 1 GETTING VALUES
+im = cv2.imread("Resources/s3.jpg")
+im = cv2.resize(im, (500, 500))
+imgen = Generate_Solution_Image(mat)
+cv2.imshow("Friends1",im)
+boundaries = []
+imOut = np.float32([])
+def HundleMouseEvents(notInterest,XCoordiante,YCoordinate,isLeftPressed,NotInterest):
+   if(isLeftPressed == 1):
+      if(len(boundaries) == 4):
+          boundaries.clear()
+          return
+      boundaries.append([XCoordiante,YCoordinate])
+      print(boundaries)
+      if(len(boundaries) == 4):
+
+         Width, Height = 450, 450
+         Width2, Height2 = 500, 500
+         TransFrom = np.float32([[0,0],[Height,0],[0,Width],[Width,Height]])
+         TransTo = np.float32(boundaries)
+         mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+         imOut = cv2.warpPerspective(imgen, mat, (Width2, Height2))
+         print("pre Trans ", boundaries)
+         terget_image = Merge_Two_Images(imOut, im)
+         cv2.imshow(" Cut ", terget_image)
+         cv2.waitKey(0)
+cv2.setMouseCallback("Friends1",HundleMouseEvents)
+cv2.waitKey(0)
+'''
+
+import cv2
+import operator
+import numpy as np
+
+def Merge_Two_Images(im, im2):
+    '''
+    for i in range(0,500):
+        for j in range(0, 500):
+            if(im[i,j] != 0):
+                im2[i,j] = [im[i,j], 0, 0]
+
+    '''
+    roi = im2.copy()
+    mask = im
+    mask_inv = cv2.bitwise_not(mask)
+    image1_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
+    image2_fg = cv2.cvtColor(cv2.bitwise_and(im, im, mask=mask), cv2.COLOR_GRAY2BGR)
+    im2= cv2.add(image1_bg, image2_fg)
+
+    return im2
+
+def Generate_Solution_Image(matrix):
+    frame = cv2.imread('Resources/digits/empty.jpg',0)
+    for i in range(0,9):
+        for j in range(0,9):
+            frame[i*50:(i+1)*50,j*50:(j+1)*50] = cv2.imread('Resources/digits/d' + str(matrix[i,j]) +'.jpg',0)
+    ret, frame = cv2.threshold(frame, 127, 255, cv2.THRESH_BINARY)
+    return frame
+
+
+def Track_Video_Caption(video_frame, current_solution):
+    #im = video_frame.copy()
+    # imTemp = cv2.imread('Resources/s2.jpg')
+    #imTemp = video_frame.copy()
+    im = cv2.resize(video_frame, (500, 500))
+    #imTemp = cv2.resize(imTemp, (500, 500))
+    imGra = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    img = cv2.adaptiveThreshold(imGra, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 12)
+    imgt = cv2.bitwise_not(img, img)
+
+    contor, hierarchy = cv2.findContours(imgt, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[-2:]
+    #cv2.drawContours(imTemp, contor, -1, (0, 0, 255), 2)
+
+    contours = sorted(contor, key=cv2.contourArea, reverse=True)
+    polygon = contours[0]
+    bottom_right, _ = max(enumerate([pt[0][0] + pt[0][1] for pt in
+                                     polygon]), key=operator.itemgetter(1))
+    top_left, _ = min(enumerate([pt[0][0] + pt[0][1] for pt in
+                                 polygon]), key=operator.itemgetter(1))
+    bottom_left, _ = min(enumerate([pt[0][0] - pt[0][1] for pt in
+                                    polygon]), key=operator.itemgetter(1))
+    top_right, _ = max(enumerate([pt[0][0] - pt[0][1] for pt in
+                                  polygon]), key=operator.itemgetter(1))
+
+    Width, Height = 450, 450    # should be current solution dimension
+    Width2, Height2 = 500, 500    # should be video frame dimension
+    TransFrom = np.float32([[0, 0], [Height, 0], [0, Width], [Width, Height]])
+    TransTo = np.float32([[polygon[top_left][0][0], polygon[top_left][0][1]],
+                          [polygon[top_right][0][0], polygon[top_right][0][1]],
+                          [polygon[bottom_left][0][0], polygon[bottom_left][0][1]],
+                          [polygon[bottom_right][0][0], polygon[bottom_right][0][1]]])
+    mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+    imOut = cv2.warpPerspective(current_solution, mat, (Width2, Height2))
+
+    terget_image = Merge_Two_Images(imOut, im)
+    return terget_image
+
+
+def OCR(Digits,model):
+    output = []
+
+    for i in range(0, len(Digits)):
+
+        # datasets.append((l,img))
+        im1 = cv2.cvtColor(Digits[i], cv2.COLOR_BGR2GRAY)
+        im = cv2.adaptiveThreshold(im1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 33, 10)
+        #cv2.imshow('rere',im)
+        cv2.imshow('sss',im)
+        #print('UUUUUUUUUUUUUUUUUUUUUUUU')
+        result = []
+        # step 1
+        #im = cv2.resize(im,(50,50))
+        imarr = np.asarray(im)
+        print(imarr)
+
+        areas = Floating_Point_Algorithm(imarr, imarr.shape, 0)
+        print(areas)
+        # print('we initially have ' +str(len(areas)) + ' areas')
+        filtered_areas2 = []
+        # step 2 filtering
+        areas.sort(key=len)
+        filtered_areas = areas[-2:].copy()
+        # print('after take two most larg we have ' + str(len(filtered_areas)) + ' areas')
+        for area in filtered_areas:
+            if len(area) > 40:
+                filtered_areas2.append(area)
+        # print('after thresholding we have ' + str(len(filtered_areas2)) + ' areas')
+        # print(filtered_areas2)
+        # step 3
+        l = len(filtered_areas2)
+
+        max_X = 0
+        min_X = 50
+        max_Y = 0
+        min_Y = 50
+
+        if (l == 0):
+            # print('length of areas is zero')
+            # print('empty '+ name + '-' + str(l))
+            output.append(0)
+            print('fffffffffffffffff')
+            result = 0
+        elif (l == 1):
+            # print('length of areas is one')
+            max_X = 0
+            min_X = 50
+            max_Y = 0
+            min_Y = 50
+            # print(filtered_areas2[0])
+            for point in filtered_areas2[0]:
+                # print(point[0])
+                if (point[0] > max_X):
+                    max_X = point[0]
+                if (point[0] <= min_X):
+                    min_X = point[0]
+                if (point[1] > max_Y):
+                    max_Y = point[1]
+                if (point[1] <= min_Y):
+                    min_Y = point[1]
+            Y_dist = max_Y - min_Y
+            X_dist = max_X - min_X
+            if (Y_dist > 45 or X_dist > 45):
+                # print('empty '+ name + '-' + str(l))
+                print('ffffffd')
+                output.append(0)
+                result = 0
+            else:
+                result = filtered_areas2[0]
+        else:
+            max1 = 0
+            max_X1 = 0
+            min_X1 = 50
+            max_Y1 = 0
+            min_Y1 = 50
+            for point in filtered_areas2[0]:
+                if (point[0] > max_X1):
+                    max_X1 = point[0]
+                if (point[0] <= min_X1):
+                    min_X1 = point[0]
+                if (point[1] > max_Y1):
+                    max_Y1 = point[1]
+                if (point[1] <= min_Y1):
+                    min_Y1 = point[1]
+            Y_dist1 = max_Y1 - min_Y1
+            X_dist1 = max_X1 - min_X1
+            if (Y_dist1 > X_dist1):
+                max1 = Y_dist1
+            else:
+                max1 = Y_dist1
+
+            max2 = 0
+            max_X2 = 0
+            min_X2 = 50
+            max_Y2 = 0
+            min_Y2 = 50
+            for point in filtered_areas2[1]:
+                if (point[0] > max_X2):
+                    max_X2 = point[0]
+                if (point[0] <= min_X2):
+                    min_X2 = point[0]
+                if (point[1] > max_Y2):
+                    max_Y2 = point[1]
+                if (point[1] <= min_Y2):
+                    min_Y2 = point[1]
+            Y_dist2 = max_Y2 - min_Y2
+            X_dist2 = max_X2 - min_X2
+
+            if (Y_dist2 > X_dist2):
+                max2 = Y_dist2
+            else:
+                max2 = Y_dist2
+            # print(max2)
+            # print(max1)
+            if (max2 > max1):
+                result = filtered_areas2[0]
+
+                max_X = max_X1
+                min_X = min_X1
+                max_Y = max_Y1
+                min_Y = min_Y1
+            else:
+                result = filtered_areas2[1]
+
+                max_X = max_X2
+                min_X = min_X2
+                max_Y = max_Y2
+                min_Y = min_Y2
+        # step 4 perspective
+        newIM = np.zeros((50, 50))
+        if (result != 0):
+            for cell in result:
+                newIM[cell[1]][cell[0]] = 255
+                # plt.imshow(newIM,cmap = 'gray')
+            # Width, Height = 40, 20
+
+            TransFrom = np.float32([[min_X, min_Y], [max_X, min_Y], [min_X, max_Y], [max_X, max_Y]])
+            TransTo = np.float32([[0, 0], [0, 10], [20, 0], [20, 10]])
+            mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+            imOut = cv2.warpPerspective(newIM, mat, (20, 10))
+
+            ret, imOut = cv2.threshold(imOut, 100, 255, cv2.THRESH_BINARY)
+            cv2.imshow('ffdf',imOut)
+            #print('gggggg')
+            #cv2.waitKey(0)
+            prediction = model.predict(np.array([imOut]))[0]
+            output.append(decode(prediction))
+    return output
+
+
+def Solve_Sudoku(im, classifier):
+    #im = cv2.imread('Resources/s2.jpg')
+    #imTemp = cv2.imread('Resources/s2.jpg')
+    #imTemp = im.copy()
+    im = cv2.resize(im, (500, 500))
+    #imTemp = cv2.resize(imTemp, (300, 300))
+    imGra = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    img = cv2.adaptiveThreshold(imGra, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 12)
+    imgt = cv2.bitwise_not(img,img)
+
+
+    contor, hierarchy = cv2.findContours(imgt,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)[-2:]
+    #cv2.drawContours(im,contor,-1,(0,0,255),2)
+    #cv2.imshow('contour',im)
+
+    contours = sorted(contor, key=cv2.contourArea, reverse=True)
+    polygon = contours[0]
+    bottom_right, _ = max(enumerate([pt[0][0] + pt[0][1] for pt in
+                      polygon]), key=operator.itemgetter(1))
+    top_left, _ = min(enumerate([pt[0][0] + pt[0][1] for pt in
+                  polygon]), key=operator.itemgetter(1))
+    bottom_left, _ = min(enumerate([pt[0][0] - pt[0][1] for pt in
+                     polygon]), key=operator.itemgetter(1))
+    top_right, _ = max(enumerate([pt[0][0] - pt[0][1] for pt in
+                   polygon]), key=operator.itemgetter(1))
+
+    Width, Height = 450, 450
+
+    TransFrom = np.float32([[polygon[top_left][0][0], polygon[top_left][0][1]],
+                        [polygon[top_right][0][0], polygon[top_right][0][1]],
+                        [polygon[bottom_left][0][0], polygon[bottom_left][0][1]],
+                        [polygon[bottom_right][0][0], polygon[bottom_right][0][1]]])
+    TransTo = np.float32([[0, 0], [Height, 0], [0, Width], [Width, Height]])
+    mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+    imOut = cv2.warpPerspective(im, mat, (Width, Height))
+    imOu = cv2.warpPerspective(imgt, mat, (Width, Height))            # input for is_Changed function
+
+    #cv2.imshow('perspective',imOut)
+    Digits = []
+    CC = 0
+    for i in range(0,9):
+        for j in range(0,9):
+            Digits.append(imOut[i*50:(i+1)*50,j*50:(j+1)*50].copy())
+            #cv2.imwrite('Resources/test/'+str(CC)+'.jpg',imOut[i*50:(i+1)*50,j*50:(j+1)*50].copy())
+            CC+=1
+    #cv2.imshow('fdfdfd',Digits[5])
+    # 1 - classify the digits in Digits array using NN
+    # input : Digits - array contain 81 image of numbers or empty with size 9*9.
+    # output : Digits - array contain 81 numbers or empty ( as -1 ) that represent the classified images.
+    sol1 = OCR(Digits,classifier)
+    #print('OSR : ',sol1)
+
+
+    # 2 - find solution of step -1- output grid of digits using sudoku solver algorithm
+    # input : Digits - array contain 81 numbers or empty ( as -1 ) that represent the classified images
+    # output : Digits - array contain 81 numbers that represent the solution
+
+
+    # virtual solution to complete steps
+    sol = np.array([[1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9],
+                [1, 2, 3, 4, 5, 6, 7, 8, 9]])
+    current_solution = Generate_Solution_Image(sol)
+
+    Width, Height = 450, 450  # should be current solution dimension
+    Width2, Height2 = 500, 500  # should be video frame dimension
+    TransFrom = np.float32([[0, 0], [Height, 0], [0, Width], [Width, Height]])
+    TransTo = np.float32([[polygon[top_left][0][0], polygon[top_left][0][1]],
+                          [polygon[top_right][0][0], polygon[top_right][0][1]],
+                          [polygon[bottom_left][0][0], polygon[bottom_left][0][1]],
+                          [polygon[bottom_right][0][0], polygon[bottom_right][0][1]]])
+    mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+    imOut = cv2.warpPerspective(current_solution, mat, (Width2, Height2))
+
+    terget_image = Merge_Two_Images(imOut, im)
+    return terget_image
+
+
+def decode(y):
+    L = list(y)
+    MAX = 0
+    INDEX = -1
+    for i in range(0,len(L)):
+        if(L[i] > MAX):
+            MAX = L[i]
+            INDEX = i
+    return INDEX + 1
+
+
+
+
+
+def Play_Video_Stream():
+
+    cap = cv2.VideoCapture(0)
+    track_update_rate = 15
+    solution_update_rate = 45
+    counter = 0
+
+    _, frame = cap.read()
+    current_solution = Solve_Sudoku(frame)
+
+    while True:
+          _,frame = cap.read()
+
+          if(counter > solution_update_rate):
+              current_solution = Solve_Sudoku(frame)
+              counter = 0
+              continue
+
+          if (counter > track_update_rate):
+              frame = Solve_Sudoku(frame,current_solution)
+
+
+          #for i in range(3000000):
+          #    counter += 0.0037
+
+          cv2.imshow(' Video ', frame)
+
+          counter += 1
+
+          key = cv2.waitKey(1)
+          if key == 7:
+             break
+
+
+#Play_Video_Stream()
+
+#h = 0
+#frame = cv2.imread('Resources/Messi.jpg')
+#current_solution = Solve_Sudoku(frame)
+#while(h < 10000):
+#    current_solution = Solve_Sudoku(frame)
+#    Track_Video_Caption(frame, current_solution)
+#    print(h)
+#    h+=1
+
+import keras
+new_model = keras.Sequential([
+    keras.layers.Flatten(input_shape=(10, 20)),
+    keras.layers.Dense(10, activation='relu'),
+    keras.layers.Dense(9,activation='softmax')
+])
+
+new_model.load_weights('C:/Users/stadia/PycharmProjects/Sod_Sol/Resources/model/ocr_digits.h5')
+#print(new_model.predict(np.array([cv2.imread('Resources/test/img003-00323.png',0)])))
+im = cv2.imread('Resources/test/img004-00144.png')
+l = []
+l.append(im)
+print(OCR(l,new_model))
+cv2.waitKey(0)
+#L = []
+
+#L.append(cv2.imread('C:/Users/stadia/PycharmProjects/Sod_Sol/Resources/datasets/1528-20.jpg'))
+#print('ocr : ',OCR(L,new_model))
+
+#import time
+#file_name = 'Resources/original/image1040.original.jpg'
+#img = cv2.imread(file_name)
+#timestamp = int(time.time() * 1000.0)
+#for i in range(0,1000):
+#     print(i)
+#     timestamp1 = int(time.time() * 1000.0)
+#     im = Solve_Sudoku(img,new_model)
+#     timestamp2 = int(time.time() * 1000.0)
+#     print('bet two frames  ',timestamp2 - timestamp1)
+#     print('until now  ',timestamp2 - timestamp)
+     #im = cv2.resize(im, (300, 300))
+     #im2 = Track_Video_Caption(cv2.imread(file_name), im)
+     #cv2.imshow('im', im)
+     #cv2.imshow('im2', im2)
+     #cv2.waitKey(0)
+
+
+'''
+im2 = cv2.imread('Resources/Messi.jpg')
+im2 = cv2.resize(im2, (300, 300))
+roi = im2.copy()
+mask = im
+mask_inv = cv2.bitwise_not(mask)
+image1_bg = cv2.bitwise_and(roi,roi,mask=mask_inv)
+image2_fg = cv2.cvtColor(cv2.bitwise_and(im ,im ,mask=mask),cv2.COLOR_GRAY2BGR)
+dst = cv2.add(image1_bg,image2_fg)
+im2 = dst
+cv2.imshow('im2', im2 )
+
+cv2.waitKey(0)
+'''
+
+'''
+import cv2 as cv
+
+img = cv.imread('Resources/1 - Copy.jpg',0)
+template = cv.imread('Resources/2.jpg',0)
+template = cv.resize(template,(75,50))
+h,w = template.shape
+res = cv.matchTemplate(img,template,cv.TM_SQDIFF)
+minVal,maxVal,minLoc,maxLoc = cv.minMaxLoc(res)
+topLeft = minLoc
+bottom_right = (topLeft[0]+w,topLeft[1]+h)
+cv.rectangle(img,topLeft,bottom_right,255,2)
+cv.imshow('hhhh',img)
+cv.waitKey(0)
+'''
+
+'''
+import cv2
+import numpy as np
+
+img = cv2.imread('Resources/s3.jpg')
+
+proc = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+
+proc = cv2.bitwise_not(proc, proc)
+kernel = np.array([[0., 1., 0.], [1., 1., 1.], [0., 1., 0.]],np.uint8)
+proc = cv2.dilate(proc, kernel)
+
+cv2.imshow('image', proc)
+cv2.waitKey()
+'''
+'''
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+import math
+
+
+
+img = cv2.imread('Resources\yoyo.png')
+rows, cols, ch = img.shape
+Theta = 0.15
+M0 = np.float32([[1, 0, 0],
+                 [0, 1, 0]])
+
+#rotation matrix
+M1 = np.float32([[math.cos(Theta), -1*math.sin(Theta), 200],
+                [math.sin(Theta), math.cos(Theta), -70]])
+
+#transform matrix
+M2 = np.float32([[1, 0, 400],
+                 [0, 1, -100]])
+
+#affine
+M3 = np.float32([[0.4, 0.3, 0.9],[1 , 0.1 , 0.5]])
+
+#similarity
+Theta2 = -1
+#first : rotation
+M4t = np.float32([[math.cos(Theta2), -1*math.sin(Theta2), 0],
+                [math.sin(Theta2), math.cos(Theta2), 500]])
+
+M4tIm = cv2.warpAffine(img, M4t, (cols, rows))
+
+#second transformation
+M4 = np.float32([[0.6, 0, 0],
+                 [0, 0.6, 0]])
+
+dst = []
+dst.append(cv2.warpAffine(img, M0, (cols, rows)))
+dst.append(cv2.warpAffine(img, M1, (cols, rows)))
+dst.append(cv2.warpAffine(img, M2, (cols, rows)))
+dst.append(cv2.warpAffine(img, M3, (cols, rows)))
+dst.append(cv2.warpAffine(M4tIm, M4, (cols, rows)))
+dst.append(cv2.warpAffine(img, M2, (cols, rows)))
+
+
+fig=plt.figure(figsize=(16, 16))
+columns = 3
+rows = 2
+for i in range(0, columns*rows):
+    fig.add_subplot(rows, columns, i +1)
+    plt.imshow(dst[i])
+plt.show()
+'''

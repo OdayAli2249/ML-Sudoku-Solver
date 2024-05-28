@@ -1,0 +1,868 @@
+
+import numpy as np
+
+
+def push(stack , item):
+    stack.append(item)
+    return stack
+
+def pop(stack):
+    new_stack = stack[1:]
+    return new_stack, stack[0]
+def empty(stack):
+    #print('\nlen',len(stack))
+    if (len(stack) == 0):
+        return True
+    return False
+
+def Boundaries(x, y, dimension):
+    if (y < dimension[0] and -1 < y and x < dimension[1] and -1 < x):
+        return True
+    else: return False
+
+def Float(i, j, Matrix, Visited, dimension, BW):
+
+    Area = []
+    Stack = [[j,i]]
+    Visited[i,j] = 1
+    x = 0
+    y = 0
+    #print('\nstart ..')
+    while(not empty(Stack)):
+
+        Stack,Cell = pop(Stack)
+
+        x = Cell[0] + 1
+        y = Cell[1]
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-1 ..')
+            Area.append([x,y])
+            push(Stack, [x,y])
+            Visited[y, x] = 1
+        x = Cell[0]
+        y = Cell[1] + 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-2 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] + 1
+        y = Cell[1] + 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-3 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] - 1
+        y = Cell[1]
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-4 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0]
+        y = Cell[1] - 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-5 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] - 1
+        y = Cell[1] - 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-6 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] - 1
+        y = Cell[1] + 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-7 ..')
+            Area.append([x,y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+        x = Cell[0] + 1
+        y = Cell[1] - 1
+        if (Boundaries(x, y, dimension) and Visited[y,x] == 0 and Matrix[y,x] == BW):
+            #print('\nc-8 ..')
+            Area.append([x, y])
+            push(Stack, [x, y])
+            Visited[y, x] = 1
+
+
+    return Area
+
+
+img = np.array([[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+                [0,0,0,0,0,1,1,1,1,0,0,0,0,0],
+                [0,0,0,0,0,1,1,0,0,0,0,0,0,0],
+                [1,0,0,0,0,0,1,0,0,0,0,1,0,1],
+                [1,0,0,0,0,1,1,1,1,1,1,1,1,1],
+                [1,1,1,1,1,1,0,0,0,0,0,1,0,0],
+                [1,0,0,0,0,0,0,0,0,0,0,1,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+                [0,0,0,0,0,1,1,1,1,0,0,0,0,0],
+                [0,0,0,0,0,1,1,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+dimension = img.shape
+#print(img)
+#Visited = np.zeros((dimension[0],dimension[1]))
+#res = Float(10, 7, img, Visited, dimension)
+#print(res)
+#print(len(res))
+
+def Floating_Point_Algorithm(Matrix, dimension, BW) :
+
+    Visited = np.zeros((dimension[0],dimension[1]))
+    Areas = []
+    for i in range(15, 35):
+        for j in range(12, 38):
+            if(Visited[i][j] == 0 and Matrix[i][j] == BW):
+                Area = Float(i, j, Matrix, Visited, dimension, BW)
+                if (len(Area) != 0):
+                   Areas.append(Area)
+    return Areas
+
+
+
+
+class EntryData:
+    def __init__(self, r, c, n):
+        self.row = r
+        self.col = c
+        self.choices = n
+
+    def set_data(self, r, c, n):
+        self.row = r
+        self.col = c
+        self.choices = n
+
+
+# Solve Sudoku using Best-first search
+def solve_sudoku(matrix):
+
+    cont = [True]
+    # See if it is even possible to have a solution
+    for i in range(9):
+        for j in range(9):
+
+            if not can_be_correct(matrix, i, j):  # If it is not possible, stop
+
+                return
+    sudoku_helper(matrix, cont)  # Otherwise try to solve the Sudoku puzzle
+
+
+# Helper function - The heart of Best First Search
+def sudoku_helper(matrix, cont):
+    if not cont[0]:  # Stopping point 1
+        return
+
+    # Find the best entry (The one with the least possibilities)
+    best_candidate = EntryData(-1, -1, 100)
+    for i in range(9):
+        for j in range(9):
+            if matrix[i][j] == 0:  # If it is unfilled
+                num_choices = count_choices(matrix, i, j)
+                if best_candidate.choices > num_choices:
+                    best_candidate.set_data(i, j, num_choices)
+
+    # If didn't find any choices, it means...
+    if best_candidate.choices == 100:  # Has filled all board, Best-First Search done! Note, whether we have a solution or not depends on whether all Board is non-zero
+        cont[0] = False  # Set the flag so that the rest of the recursive calls can stop at "stopping points"
+        return
+
+    row = best_candidate.row
+    col = best_candidate.col
+
+    # If found the best candidate, try to fill 1-9
+    for j in range(1, 10):
+        if not cont[0]:  # Stopping point 2
+            return
+
+        matrix[row][col] = j
+
+        if can_be_correct(matrix, row, col):
+            sudoku_helper(matrix, cont)
+
+    if not cont[0]:  # Stopping point 3
+        return
+    matrix[row][col] = 0  # Backtrack, mark the current cell empty again
+
+
+# Count the number of choices haven't been used
+def count_choices(matrix, i, j):
+    can_pick = [True, True, True, True, True, True, True, True, True, True];  # From 0 to 9 - drop 0
+
+    # Check row
+    for k in range(9):
+        can_pick[matrix[i][k]] = False
+
+    # Check col
+    for k in range(9):
+        can_pick[matrix[k][j]] = False;
+
+    # Check 3x3 square
+    r = i // 3
+    c = j // 3
+    for row in range(r * 3, r * 3 + 3):
+        for col in range(c * 3, c * 3 + 3):
+            can_pick[matrix[row][col]] = False
+
+    # Count
+    count = 0
+    for k in range(1, 10):  # 1 to 9
+        if can_pick[k]:
+            count += 1
+
+    return count
+
+
+# Return true if the current cell doesn't create any violation
+def can_be_correct(matrix, row, col):
+    # Check row
+    for c in range(9):
+        if matrix[row][col] != 0 and col != c and matrix[row][col] == matrix[row][c]:
+            return False
+
+    # Check column
+    for r in range(9):
+        if matrix[row][col] != 0 and row != r and matrix[row][col] == matrix[r][col]:
+            return False
+
+    # Check 3x3 square
+    r = row // 3
+    c = col // 3
+    for i in range(r * 3, r * 3 + 3):
+        for j in range(c * 3, c * 3 + 3):
+            if row != i and col != j and matrix[i][j] != 0 and matrix[i][j] == matrix[row][col]:
+                return False
+
+    return True
+
+
+# Return true if the whole board has been occupied by some non-zero number
+# If this happens, the current board is the solution to the original Sudoku
+def all_board_non_zero(matrix):
+    for i in range(9):
+        for j in range(9):
+            if matrix[i][j] == 0:
+                return False
+    return True
+
+
+
+
+import cv2
+import operator
+import numpy as np
+
+def Merge_Two_Images(im, im2):
+    '''
+    for i in range(0,500):
+        for j in range(0, 500):
+            if(im[i,j] != 0):
+                im2[i,j] = [im[i,j], 0, 0]
+
+    '''
+    roi = im2.copy()
+    mask = im
+    mask_inv = cv2.bitwise_not(mask)
+    image1_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
+    image2_fg = cv2.cvtColor(cv2.bitwise_and(im, im, mask=mask), cv2.COLOR_GRAY2BGR)
+    im2= cv2.add(image1_bg, image2_fg)
+
+    return im2
+
+def Generate_Solution_Image(matrix,list_of_digits):
+    frame = cv2.imread('Resources/digits/empty.jpg',0)
+    for i in range(0,9):
+        for j in range(0,9):
+            #print(matrix[i,j])
+            #frame[i*50:(i+1)*50,j*50:(j+1)*50] = cv2.imread('Resources/digits/d' + str(matrix[i,j]) +'.jpg',0)
+            frame[i * 50:(i + 1) * 50, j * 50:(j + 1) * 50] = list_of_digits[matrix[i,j]]
+    ret, frame = cv2.threshold(frame, 127, 255, cv2.THRESH_BINARY)
+    return frame
+
+
+def Track_Video_Caption(video_frame, current_solution):
+    #im = video_frame.copy()
+    # imTemp = cv2.imread('Resources/s2.jpg')
+    #imTemp = video_frame.copy()
+    im = cv2.resize(video_frame, (500, 500))
+    #imTemp = cv2.resize(imTemp, (500, 500))
+    imGra = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    img = cv2.adaptiveThreshold(imGra, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 12)
+    imgt = cv2.bitwise_not(img, img)
+
+    contor, hierarchy = cv2.findContours(imgt, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[-2:]
+    #cv2.drawContours(imTemp, contor, -1, (0, 0, 255), 2)
+
+    contours = sorted(contor, key=cv2.contourArea, reverse=True)
+    polygon = contours[0]
+    bottom_right, _ = max(enumerate([pt[0][0] + pt[0][1] for pt in
+                                     polygon]), key=operator.itemgetter(1))
+    top_left, _ = min(enumerate([pt[0][0] + pt[0][1] for pt in
+                                 polygon]), key=operator.itemgetter(1))
+    bottom_left, _ = min(enumerate([pt[0][0] - pt[0][1] for pt in
+                                    polygon]), key=operator.itemgetter(1))
+    top_right, _ = max(enumerate([pt[0][0] - pt[0][1] for pt in
+                                  polygon]), key=operator.itemgetter(1))
+
+    Width, Height = 450, 450    # should be current solution dimension
+    Width2, Height2 = 500, 500    # should be video frame dimension
+    TransFrom = np.float32([[0, 0], [Height, 0], [0, Width], [Width, Height]])
+    TransTo = np.float32([[polygon[top_left][0][0], polygon[top_left][0][1]],
+                          [polygon[top_right][0][0], polygon[top_right][0][1]],
+                          [polygon[bottom_left][0][0], polygon[bottom_left][0][1]],
+                          [polygon[bottom_right][0][0], polygon[bottom_right][0][1]]])
+    mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+    imOut = cv2.warpPerspective(current_solution, mat, (Width2, Height2))
+
+    terget_image = Merge_Two_Images(imOut, im)
+    return terget_image
+
+
+def OCR(Digits,model):
+    output = []
+
+    for i in range(0, len(Digits)):
+
+        # datasets.append((l,img))
+        im1 = cv2.cvtColor(Digits[i], cv2.COLOR_BGR2GRAY)
+        im = cv2.adaptiveThreshold(im1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 33, 10)
+        cv2.imshow('sss',im)
+        #print('UUUUUUUUUUUUUUUUUUUUUUUU')
+        result = []
+        # step 1
+        imarr = np.asarray(im)
+        areas = Floating_Point_Algorithm(imarr, imarr.shape, 0)
+        # print('we initially have ' +str(len(areas)) + ' areas')
+        filtered_areas2 = []
+        # step 2 filtering
+        areas.sort(key=len)
+        filtered_areas = areas[-2:].copy()
+        # print('after take two most larg we have ' + str(len(filtered_areas)) + ' areas')
+        for area in filtered_areas:
+            if len(area) > 40:
+                filtered_areas2.append(area)
+        # print('after thresholding we have ' + str(len(filtered_areas2)) + ' areas')
+        # print(filtered_areas2)
+        # step 3
+        l = len(filtered_areas2)
+
+        max_X = 0
+        min_X = 50
+        max_Y = 0
+        min_Y = 50
+
+        if (l == 0):
+            # print('length of areas is zero')
+            # print('empty '+ name + '-' + str(l))
+            output.append(0)
+            #print('fffffffffffffffff')
+            result = 0
+        elif (l == 1):
+            # print('length of areas is one')
+            max_X = 0
+            min_X = 50
+            max_Y = 0
+            min_Y = 50
+            # print(filtered_areas2[0])
+            for point in filtered_areas2[0]:
+                # print(point[0])
+                if (point[0] > max_X):
+                    max_X = point[0]
+                if (point[0] <= min_X):
+                    min_X = point[0]
+                if (point[1] > max_Y):
+                    max_Y = point[1]
+                if (point[1] <= min_Y):
+                    min_Y = point[1]
+            Y_dist = max_Y - min_Y
+            X_dist = max_X - min_X
+            if (Y_dist > 35 or X_dist > 35):
+                # print('empty '+ name + '-' + str(l))
+                output.append(0)
+                result = 0
+            else:
+                result = filtered_areas2[0]
+        else:
+            max1 = 0
+            max_X1 = 0
+            min_X1 = 50
+            max_Y1 = 0
+            min_Y1 = 50
+            for point in filtered_areas2[0]:
+                if (point[0] > max_X1):
+                    max_X1 = point[0]
+                if (point[0] <= min_X1):
+                    min_X1 = point[0]
+                if (point[1] > max_Y1):
+                    max_Y1 = point[1]
+                if (point[1] <= min_Y1):
+                    min_Y1 = point[1]
+            Y_dist1 = max_Y1 - min_Y1
+            X_dist1 = max_X1 - min_X1
+            if (Y_dist1 > X_dist1):
+                max1 = Y_dist1
+            else:
+                max1 = Y_dist1
+
+            max2 = 0
+            max_X2 = 0
+            min_X2 = 50
+            max_Y2 = 0
+            min_Y2 = 50
+            for point in filtered_areas2[1]:
+                if (point[0] > max_X2):
+                    max_X2 = point[0]
+                if (point[0] <= min_X2):
+                    min_X2 = point[0]
+                if (point[1] > max_Y2):
+                    max_Y2 = point[1]
+                if (point[1] <= min_Y2):
+                    min_Y2 = point[1]
+            Y_dist2 = max_Y2 - min_Y2
+            X_dist2 = max_X2 - min_X2
+
+            if (Y_dist2 > X_dist2):
+                max2 = Y_dist2
+            else:
+                max2 = Y_dist2
+            # print(max2)
+            # print(max1)
+            if (max2 > max1):
+                result = filtered_areas2[0]
+
+                max_X = max_X1
+                min_X = min_X1
+                max_Y = max_Y1
+                min_Y = min_Y1
+            else:
+                result = filtered_areas2[1]
+
+                max_X = max_X2
+                min_X = min_X2
+                max_Y = max_Y2
+                min_Y = min_Y2
+        # step 4 perspective
+        newIM = np.zeros((50, 50))
+        if (result != 0):
+            for cell in result:
+                newIM[cell[1]][cell[0]] = 255
+                # plt.imshow(newIM,cmap = 'gray')
+            # Width, Height = 40, 20
+
+            TransFrom = np.float32([[min_X, min_Y], [max_X, min_Y], [min_X, max_Y], [max_X, max_Y]])
+            TransTo = np.float32([[0, 0], [0, 10], [20, 0], [20, 10]])
+            mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+            imOut = cv2.warpPerspective(newIM, mat, (20, 10))
+
+            ret, imOut = cv2.threshold(imOut, 100, 255, cv2.THRESH_BINARY)
+            prediction = model.predict(np.array([imOut]))[0]
+            output.append(decode(prediction))
+    return output
+
+
+def hog_compute(image):
+    #image = cv2.resize(image,(50,50))
+    hog_output_shape = 441
+    number_featuers = []
+    winSize = (10, 10)
+    blockSize = (4, 4)
+    blockStride = (1, 1)
+    cellSize = (4, 4)
+    n_bins = 9
+    hog = cv2.HOGDescriptor(winSize, blockSize, blockStride, cellSize, n_bins)
+    return np.array(hog.compute(cv2.cvtColor(image,cv2.COLOR_GRAY2BGR), None, None)).reshape((-1, hog_output_shape))
+
+def OCRV2(Digits,model):
+    output = []
+
+    for i in range(0, len(Digits)):
+
+        # datasets.append((l,img))
+        im1 = cv2.cvtColor(Digits[i], cv2.COLOR_BGR2GRAY)
+        im = cv2.adaptiveThreshold(im1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 33, 10)
+        #cv2.imshow('sss',im)
+        #print('UUUUUUUUUUUUUUUUUUUUUUUU')
+        result = []
+        # step 1
+        imarr = np.asarray(im)
+        areas = Floating_Point_Algorithm(imarr, imarr.shape, 0)
+        # print('we initially have ' +str(len(areas)) + ' areas')
+        filtered_areas2 = []
+        # step 2 filtering
+        areas.sort(key=len)
+        filtered_areas = areas[-2:].copy()
+        # print('after take two most larg we have ' + str(len(filtered_areas)) + ' areas')
+        for area in filtered_areas:
+            if len(area) > 40:
+                filtered_areas2.append(area)
+        # print('after thresholding we have ' + str(len(filtered_areas2)) + ' areas')
+        # print(filtered_areas2)
+        # step 3
+        l = len(filtered_areas2)
+
+        max_X = 0
+        min_X = 50
+        max_Y = 0
+        min_Y = 50
+
+        if (l == 0):
+            # print('length of areas is zero')
+            # print('empty '+ name + '-' + str(l))
+            output.append(0)
+            #print('fffffffffffffffff')
+            result = 0
+        elif (l == 1):
+            # print('length of areas is one')
+            max_X = 0
+            min_X = 50
+            max_Y = 0
+            min_Y = 50
+            # print(filtered_areas2[0])
+            for point in filtered_areas2[0]:
+                # print(point[0])
+                if (point[0] > max_X):
+                    max_X = point[0]
+                if (point[0] <= min_X):
+                    min_X = point[0]
+                if (point[1] > max_Y):
+                    max_Y = point[1]
+                if (point[1] <= min_Y):
+                    min_Y = point[1]
+            Y_dist = max_Y - min_Y
+            X_dist = max_X - min_X
+            if (Y_dist > 35 or X_dist > 35):
+                # print('empty '+ name + '-' + str(l))
+                output.append(0)
+                result = 0
+            else:
+                result = filtered_areas2[0]
+        else:
+            max1 = 0
+            max_X1 = 0
+            min_X1 = 50
+            max_Y1 = 0
+            min_Y1 = 50
+            for point in filtered_areas2[0]:
+                if (point[0] > max_X1):
+                    max_X1 = point[0]
+                if (point[0] <= min_X1):
+                    min_X1 = point[0]
+                if (point[1] > max_Y1):
+                    max_Y1 = point[1]
+                if (point[1] <= min_Y1):
+                    min_Y1 = point[1]
+            Y_dist1 = max_Y1 - min_Y1
+            X_dist1 = max_X1 - min_X1
+            if (Y_dist1 > X_dist1):
+                max1 = Y_dist1
+            else:
+                max1 = Y_dist1
+
+            max2 = 0
+            max_X2 = 0
+            min_X2 = 50
+            max_Y2 = 0
+            min_Y2 = 50
+            for point in filtered_areas2[1]:
+                if (point[0] > max_X2):
+                    max_X2 = point[0]
+                if (point[0] <= min_X2):
+                    min_X2 = point[0]
+                if (point[1] > max_Y2):
+                    max_Y2 = point[1]
+                if (point[1] <= min_Y2):
+                    min_Y2 = point[1]
+            Y_dist2 = max_Y2 - min_Y2
+            X_dist2 = max_X2 - min_X2
+
+            if (Y_dist2 > X_dist2):
+                max2 = Y_dist2
+            else:
+                max2 = Y_dist2
+            # print(max2)
+            # print(max1)
+            if (max2 > max1):
+                result = filtered_areas2[0]
+
+                max_X = max_X1
+                min_X = min_X1
+                max_Y = max_Y1
+                min_Y = min_Y1
+            else:
+                result = filtered_areas2[1]
+
+                max_X = max_X2
+                min_X = min_X2
+                max_Y = max_Y2
+                min_Y = min_Y2
+        # step 4 perspective
+        newIM = cv2.imread('empty.png',0)
+        if (result != 0):
+            for cell in result:
+                newIM[cell[1]][cell[0]] = 0
+                # plt.imshow(newIM,cmap = 'gray')
+            # Width, Height = 40, 20
+
+            TransFrom = np.float32([[min_X, min_Y], [max_X, min_Y], [min_X, max_Y], [max_X, max_Y]])
+            TransTo = np.float32([[0, 0], [0, 50], [50, 0], [50, 50]])
+            mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+            imOut = cv2.warpPerspective(newIM, mat, (50, 50))
+
+            ret, imOut = cv2.threshold(imOut, 100, 255, cv2.THRESH_BINARY)
+            v = hog_compute(imOut)
+            prediction = model.predict(np.array([v]))[0]
+            output.append(decode(prediction))
+    return output
+
+def Solve_Sudoku(im, classifier,LOD,OCRV):
+    #im = cv2.imread('Resources/s2.jpg')
+    #imTemp = cv2.imread('Resources/s2.jpg')
+    #imTemp = im.copy()
+    im = cv2.resize(im, (500, 500))
+    #imTemp = cv2.resize(imTemp, (300, 300))
+    imGra = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    img = cv2.adaptiveThreshold(imGra, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 12)
+    imgt = cv2.bitwise_not(img,img)
+
+
+    contor, hierarchy = cv2.findContours(imgt,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)[-2:]
+    #cv2.drawContours(im,contor,-1,(0,0,255),2)
+    #cv2.imshow('contour',im)
+
+    contours = sorted(contor, key=cv2.contourArea, reverse=True)
+    polygon = contours[0]
+    bottom_right, _ = max(enumerate([pt[0][0] + pt[0][1] for pt in
+                      polygon]), key=operator.itemgetter(1))
+    top_left, _ = min(enumerate([pt[0][0] + pt[0][1] for pt in
+                  polygon]), key=operator.itemgetter(1))
+    bottom_left, _ = min(enumerate([pt[0][0] - pt[0][1] for pt in
+                     polygon]), key=operator.itemgetter(1))
+    top_right, _ = max(enumerate([pt[0][0] - pt[0][1] for pt in
+                   polygon]), key=operator.itemgetter(1))
+
+
+    Width, Height = 450, 450
+
+    TransFrom = np.float32([[polygon[top_left][0][0], polygon[top_left][0][1]],
+                        [polygon[top_right][0][0], polygon[top_right][0][1]],
+                        [polygon[bottom_left][0][0], polygon[bottom_left][0][1]],
+                        [polygon[bottom_right][0][0], polygon[bottom_right][0][1]]])
+    TransTo = np.float32([[0, 0], [Height, 0], [0, Width], [Width, Height]])
+    mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+    imOut = cv2.warpPerspective(im, mat, (Width, Height))
+    imOu = cv2.warpPerspective(imgt, mat, (Width, Height))            # input for is_Changed function
+
+    #cv2.imshow('perspective',imOut)
+    Digits = []
+    CC = 0
+    for i in range(0,9):
+        for j in range(0,9):
+            Digits.append(imOut[i*50:(i+1)*50,j*50:(j+1)*50].copy())
+            #cv2.imwrite('Resources/test/'+str(CC)+'.jpg',imOut[i*50:(i+1)*50,j*50:(j+1)*50].copy())
+            CC+=1
+    #cv2.imshow('fdfdfd',Digits[5])
+    # 1 - classify the digits in Digits array using NN
+    # input : Digits - array contain 81 image of numbers or empty with size 9*9.
+    # output : Digits - array contain 81 numbers or empty ( as -1 ) that represent the classified images.
+
+    if(OCRV == 2):
+       sol1 = OCRV2(Digits,classifier)
+    else:
+       sol1 = OCR(Digits, classifier)
+    #print('OSR : ',sol1)
+    sol = []
+    for i in range(0,9):
+        sol.append(sol1[i*9:(i+1)*9])
+    print('pre-OSR : ', sol)
+    # 2 - find solution of step -1- output grid of digits using sudoku solver algorithm
+    # input : Digits - array contain 81 numbers or empty ( as -1 ) that represent the classified images
+    # output : Digits - array contain 81 numbers that represent the solution
+    solve_sudoku(sol)
+    print('post-OSR : ', sol)
+
+    current_solution = Generate_Solution_Image(np.asarray(sol),LOD)
+
+    Width, Height = 450, 450  # should be current solution dimension
+    Width2, Height2 = 500, 500  # should be video frame dimension
+    TransFrom = np.float32([[0, 0], [Height, 0], [0, Width], [Width, Height]])
+    TransTo = np.float32([[polygon[top_left][0][0], polygon[top_left][0][1]],
+                          [polygon[top_right][0][0], polygon[top_right][0][1]],
+                          [polygon[bottom_left][0][0], polygon[bottom_left][0][1]],
+                          [polygon[bottom_right][0][0], polygon[bottom_right][0][1]]])
+    mat = cv2.getPerspectiveTransform(TransFrom, TransTo)
+    imOut = cv2.warpPerspective(current_solution, mat, (Width2, Height2))
+
+    terget_image = Merge_Two_Images(imOut, im)
+    #cv2.imshow('fddd',terget_image)
+    #cv2.waitKey(0)
+    return current_solution,terget_image
+
+
+def decode(y):
+    L = list(y)
+    MAX = 0
+    INDEX = -1
+    for i in range(0,len(L)):
+        if(L[i] > MAX):
+            MAX = L[i]
+            INDEX = i
+    return INDEX + 1
+
+
+
+
+
+def Play_Video_Stream():
+
+    cap = cv2.VideoCapture(0)
+    track_update_rate = 15
+    solution_update_rate = 45
+    counter = 0
+
+    _, frame = cap.read()
+    #current_solution = Solve_Sudoku(frame)
+
+    while True:
+          _,frame = cap.read()
+
+          #if(counter > solution_update_rate):
+          #    current_solution = Solve_Sudoku(frame)
+          #    counter = 0
+          #    continue
+
+          #if (counter > track_update_rate):
+          #    frame = Solve_Sudoku(frame,current_solution)
+
+
+          #for i in range(3000000):
+          #    counter += 0.0037
+
+          cv2.imshow(' Video ', frame)
+
+          #counter += 1
+
+          key = cv2.waitKey(1)
+          if key == 7:
+             break
+
+
+
+
+#h = 0
+#frame = cv2.imread('Resources/Messi.jpg')
+#current_solution = Solve_Sudoku(frame)
+#while(h < 10000):
+#    current_solution = Solve_Sudoku(frame)
+#    Track_Video_Caption(frame, current_solution)
+#    print(h)
+#    h+=1
+
+import keras
+new_model = keras.Sequential([
+    keras.layers.Flatten(input_shape=(10, 20)),
+    keras.layers.Dense(10, activation='relu'),
+    keras.layers.Dense(9,activation='softmax')
+])
+
+new_modelV2 = keras.Sequential([
+    keras.layers.Flatten(input_shape=(121, 441)),
+    keras.layers.Dense(10, activation='relu'),
+    keras.layers.Dense(9,activation='softmax')
+])
+
+
+new_model.load_weights('C:/Users/stadia/PycharmProjects/Sod_Sol/Resources/model/ocr_digits.h5')
+new_modelV2.load_weights('C:/Users/stadia/PycharmProjects/Sod_Sol/Resources/model/hog_features_classifier.h5')
+#print(new_model.predict(np.array([cv2.imread('C:/Users/stadia/Desktop/Notebook/Untitled Folder 1/feature/1528-20-4.jpg',0)])))
+#im = cv2.imread('Resources/test/59.jpg')
+#l = []
+#l.append(im)
+#print(OCRV2(l,new_modelV2))
+#cv2.waitKey(0)
+#L = []
+
+#L.append(cv2.imread('C:/Users/stadia/PycharmProjects/Sod_Sol/Resources/datasets/1528-20.jpg'))
+#print('ocr : ',OCR(L,new_model))
+'''
+import time
+file_name = 'Resources/.jpg'
+img = cv2.imread(file_name)
+model = new_model
+OCR_VERSION = 1
+LOD = []
+for i in range(0,10):
+    LOD.append(cv2.imread('Resources/digits/d' + str(i) +'.jpg',0))
+timestamp = int(time.time() * 1000.0)
+for i in range(0,1):
+     print(i)
+     timestamp1 = int(time.time() * 1000.0)
+     im = Solve_Sudoku(img,model,LOD,OCR_VERSION)
+     cv2.imshow('hf',im)
+     timestamp2 = int(time.time() * 1000.0)
+     print('bet two frames  ',timestamp2 - timestamp1)
+     print('until now  ',timestamp2 - timestamp)
+     cv2.waitKey(0)
+     #im = cv2.resize(im, (300, 300))
+     #im2 = Track_Video_Caption(cv2.imread(file_name), im)
+     #cv2.imshow('im', im)
+     #cv2.imshow('im2', im2)
+     #cv2.waitKey(0)
+'''
+
+
+import time
+file_name = 'Resources/original/image1040.original.jpg'
+img = cv2.imread(file_name)
+model = new_model
+OCR_VERSION = 1
+LOD = []
+cap = cv2.VideoCapture(0)
+for i in range(0,10):
+    LOD.append(cv2.imread('Resources/digits/d' + str(i) +'.jpg',0))
+timestamp = int(time.time() * 1000.0)
+counter = 0
+_, frame = cap.read()
+sol,im = Solve_Sudoku(frame,model,LOD,OCR_VERSION)
+while True:
+     _, frame = cap.read()
+     print(counter)
+     counter +=1
+     timestamp1 = int(time.time() * 1000.0)
+     if(counter > 50):
+        sol,im = Solve_Sudoku(frame,model,LOD,OCR_VERSION)
+        counter = 0
+     else:
+        im = Track_Video_Caption(frame,sol)
+     timestamp2 = int(time.time() * 1000.0)
+     print('bet two frames  ',timestamp2 - timestamp1)
+     print('until now  ',timestamp2 - timestamp)
+     cv2.imshow(' Video ', im)
+     key = cv2.waitKey(1)
+     if key == 7:
+         break
+     #im = cv2.resize(im, (300, 300))
+     #im2 = Track_Video_Caption(cv2.imread(file_name), im)
+     #cv2.imshow('im', im)
+     #cv2.imshow('im2', im2)
+     #cv2.waitKey(0)
+
+
+
+#im = cv2.imread('Resources/test/d4.jpg')
+#im = cv2.resize(im, (500, 500))
+#imGra = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+#img = cv2.adaptiveThreshold(imGra, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 12)
+#im2 = cv2.morphologyEx(img,cv2.MORPH_CLOSE,(15,15))
+#cv2.imshow('fssdf',img)
+#cv2.imshow('fdf',im2)
+#cv2.imshow('fdtf',imGra)
+#cv2.waitKey(0)
+#Play_Video_Stream()
+
