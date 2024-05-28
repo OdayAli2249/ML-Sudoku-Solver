@@ -3,7 +3,7 @@ import operator
 import numpy as np
 from Solve_Sudoku import Solve_Sudoku
 from Image_Processor import Merge_Two_Images, Generate_Solution_Image
-from HUG_OCR import HUG_OCR
+from HOG_OCR import HOG_OCR
 from OCR import OCR
 from Utils import Replace_Elements_With_Zero
 
@@ -53,7 +53,7 @@ def Solution_Pipline(im, classifier,LOD,OCRV):
     # output : Digits - array contain 81 numbers or empty ( as -1 ) that represent the classified images.
 
     if(OCRV == 2):
-       sol1 = HUG_OCR(Digits,classifier)
+       sol1 = HOG_OCR(Digits,classifier)
     else:
        sol1 = OCR(Digits, classifier)
 

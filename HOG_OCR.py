@@ -17,7 +17,7 @@ def hog_compute(image):
 
 
 # OCR v2: using HOG features
-def HUG_OCR(Digits,model):
+def HOG_OCR(Digits,model):
     output = []
 
     for i in range(0, len(Digits)):
