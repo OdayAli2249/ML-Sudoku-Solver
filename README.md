@@ -1,6 +1,6 @@
 # Real-Time ML Sudoku Solver
 
-![Sudoku Solver](Results/2-sol.jpg)
+![Sudoku Solver](Results/2-sol.png)
 
 ## Introduction
 
